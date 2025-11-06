@@ -32,7 +32,7 @@ public Command costomWoodCommand(double speed2){
 public Command WoodCommand1(){
     return costomWoodCommand(Constants.maxSpeed);
 }
-public Command launcherCommand(){
+public Command woodLauncherCommand(){
   return costomWoodCommand(-Constants.maxSpeed);
 }
 }

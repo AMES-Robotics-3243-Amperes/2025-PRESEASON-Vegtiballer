@@ -13,6 +13,7 @@ import frc.robot.subsystems.FlywheelSubsystem;
 import frc.robot.subsystems.IndexSubsystem;
 
 public class Robot extends TimedRobot {
+ WoodSubsystem wood = new WoodSubsystem();
  FlywheelSubsystem flywheel = new FlywheelSubsystem();
  IndexSubsystem Index = new IndexSubsystem();
  CommandXboxController controller = new CommandXboxController(0);
@@ -32,6 +33,9 @@ public class Robot extends TimedRobot {
     .alongWith(new WaitCommand(Seconds.of(2))
     .andThen(Index.launcherCommand()))
     .withTimeout(Seconds.of(4))));
+
+    controller.x().whileTrue(wood.WoodCommand1).withTimeout(Seconds.of(1));
+    controller.y().whileTrue(wood.woodLauncherCommand).withTimeout(Seconds.of(3));
 
   //  controller.b().onTrue(
   //   flywheel.runFullSpeedCommand().withTimeout(Seconds.of(2))
