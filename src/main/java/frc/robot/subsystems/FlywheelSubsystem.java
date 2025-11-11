@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class FlywheelSubsystem extends SubsystemBase {
- SparkMax motor1 = new SparkMax(1, MotorType.kBrushless);
+ SparkMax motor1 = new SparkMax(10, MotorType.kBrushless);
 //  RelativeEncoder encoder = motor1.getEncoder();
 
   public FlywheelSubsystem() {}

@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IndexSubsystem extends SubsystemBase{
-   SparkMax motor2 = new SparkMax(2, MotorType.kBrushless); 
+   SparkMax motor2 = new SparkMax(11, MotorType.kBrushless); 
    RelativeEncoder encoder2 = motor2.getEncoder();
 
    public IndexSubsystem(){
