@@ -9,8 +9,11 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.FlywheelJoysticCommand;
+import frc.robot.commands.SwerveDriveTeleopCommand;
 import frc.robot.subsystems.FlywheelSubsystem;
 import frc.robot.subsystems.IndexSubsystem;
+import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.subsystems.WoodSubsystem;
 
 public class Robot extends TimedRobot {
  WoodSubsystem wood = new WoodSubsystem();
@@ -18,6 +21,7 @@ public class Robot extends TimedRobot {
  IndexSubsystem Index = new IndexSubsystem();
  CommandXboxController controller = new CommandXboxController(0);
  FlywheelJoysticCommand flywheelJoysticCommand = new FlywheelJoysticCommand(controller, flywheel);
+ SwerveDrivetrain drivetrain = new SwerveDrivetrain();
   public Robot() {
    /*flywheel.setDefaultCommand(flywheelJoysticCommand);
    Trigger leftx = new Trigger(() -> controller.getLeftX()<0);
@@ -34,8 +38,10 @@ public class Robot extends TimedRobot {
     .andThen(Index.launcherCommand()))
     .withTimeout(Seconds.of(4))));
 
-    controller.x().whileTrue(wood.WoodCommand1).withTimeout(Seconds.of(1));
-    controller.y().whileTrue(wood.woodLauncherCommand).withTimeout(Seconds.of(3));
+    controller.x().whileTrue(wood.WoodCommand1().withTimeout(Seconds.of(1)));
+    controller.y().whileTrue(wood.woodLauncherCommand().withTimeout(Seconds.of(3)));
+
+    drivetrain.setDefaultCommand(new SwerveDriveTeleopCommand(drivetrain, controller));
 
   //  controller.b().onTrue(
   //   flywheel.runFullSpeedCommand().withTimeout(Seconds.of(2))
