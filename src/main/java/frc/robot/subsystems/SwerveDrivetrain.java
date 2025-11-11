@@ -21,10 +21,10 @@ public class SwerveDrivetrain extends SubsystemBase {
 
 
 
-    private final SwerveModuleSubsystem t_frontleft = new SwerveModuleSubsystem(0, 0, 0, Rotation2d.fromDegrees(0) );
-    private final SwerveModuleSubsystem t_frontright = new SwerveModuleSubsystem(1, 1, 1, Rotation2d.fromDegrees(1) );
-    private final SwerveModuleSubsystem t_backleft = new SwerveModuleSubsystem(2, 2, 2, Rotation2d.fromDegrees(2) );
-    private final SwerveModuleSubsystem t_backright = new SwerveModuleSubsystem(3, 3, 3, Rotation2d.fromDegrees(3) );
+    private final SwerveModuleSubsystem t_frontleft = new SwerveModuleSubsystem(1, 2);
+    private final SwerveModuleSubsystem t_frontright = new SwerveModuleSubsystem(3, 4);
+    private final SwerveModuleSubsystem t_backleft = new SwerveModuleSubsystem(5, 6);
+    private final SwerveModuleSubsystem t_backright = new SwerveModuleSubsystem(7, 8);
 public void drive(double X,double Y, double omega){
     ChassisSpeeds speed = new ChassisSpeeds(X,Y,omega);
 SwerveModuleState[] states = kDriveKinematics.toSwerveModuleStates(speed);
