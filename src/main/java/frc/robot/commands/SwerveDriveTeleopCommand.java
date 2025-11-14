@@ -17,6 +17,8 @@ public class SwerveDriveTeleopCommand extends Command {
   public SwerveDriveTeleopCommand(SwerveDrivetrain swerveDrivetrain, CommandXboxController controller) {
     this.swerveDrivetrain = swerveDrivetrain;
     this.controller = controller;
+    
+    addRequirements(swerveDrivetrain);
   }
 
   // Called when the command is initially scheduled.

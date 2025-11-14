@@ -24,7 +24,7 @@ public void setSpeed(double speed){
 }
 
 public Command runAtSpeedCommand(double speed){
-  return runEnd(() ->motor1.set(-.08), () -> setSpeed(0));
+  return runEnd(() -> motor1.set(speed), () -> setSpeed(0));
 }  
 
 public Command runBackSpeedCommand(){
@@ -38,4 +38,8 @@ public Command runHalfSpeedCommand(){
 public Command runFullSpeedCommand() {
  return runAtSpeedCommand(Constants.maxSpeed);
 }
+
+public Command runIdleSpeedCommand() {
+  return runAtSpeedCommand(Constants.idleSpeed);
+ }
 }

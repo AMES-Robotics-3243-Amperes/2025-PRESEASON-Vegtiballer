@@ -16,7 +16,7 @@ import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.subsystems.WoodSubsystem;
 
 public class Robot extends TimedRobot {
- WoodSubsystem wood = new WoodSubsystem();
+//  WoodSubsystem wood = new WoodSubsystem();
  FlywheelSubsystem flywheel = new FlywheelSubsystem();
  IndexSubsystem Index = new IndexSubsystem();
  CommandXboxController controller = new CommandXboxController(0);
@@ -28,18 +28,21 @@ public class Robot extends TimedRobot {
     controller.a().and(leftx).onTrue(
     flywheel.runFullSpeedCommand()
    );/* */
-   controller.a()
-   .whileTrue(Index.launcherCommand().alongWith(flywheel.runBackSpeedCommand().withTimeout(Seconds.of(2))));
-   controller.b().onTrue(Index.launcherCommand1()
-   .alongWith(flywheel.runBackSpeedCommand())
-   .withTimeout(Milliseconds.of(100))
-   .andThen(flywheel.runFullSpeedCommand()
-    .alongWith(new WaitCommand(Seconds.of(2))
-    .andThen(Index.launcherCommand()))
-    .withTimeout(Seconds.of(4))));
+    // flywheel.setDefaultCommand(flywheel.runIdleSpeedCommand());
 
-    controller.x().whileTrue(wood.WoodCommand1().withTimeout(Seconds.of(1)));
-    controller.y().whileTrue(wood.woodLauncherCommand().withTimeout(Seconds.of(3)));
+   controller.a().whileTrue(
+    Index.runHalfSpeedCommand().alongWith(flywheel.runIdleSpeedCommand()).withTimeout(Seconds.of(2)));
+
+   controller.b().onTrue(Index.runBackSpeedCommand()
+   .alongWith(flywheel.runBackSpeedCommand())
+   .withTimeout(Seconds.of(0.8))
+   .andThen(flywheel.runFullSpeedCommand()
+    .alongWith(new WaitCommand(Seconds.of(0.8))
+    .andThen(Index.runHalfSpeedCommand()))
+    .withTimeout(Seconds.of(5.5))));
+
+    // controller.x().whileTrue(wood.WoodCommand1().withTimeout(Seconds.of(1)));
+    // controller.y().whileTrue(wood.woodLauncherCommand().withTimeout(Seconds.of(3)));
 
     drivetrain.setDefaultCommand(new SwerveDriveTeleopCommand(drivetrain, controller));
 

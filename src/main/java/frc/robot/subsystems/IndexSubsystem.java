@@ -1,8 +1,11 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,7 +16,9 @@ public class IndexSubsystem extends SubsystemBase{
    RelativeEncoder encoder2 = motor2.getEncoder();
 
    public IndexSubsystem(){
-
+      SparkMaxConfig config = new SparkMaxConfig();
+      config.inverted(true);
+      motor2.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
    }
    @Override
@@ -22,21 +27,24 @@ public class IndexSubsystem extends SubsystemBase{
 
    }
    
-public void setSpeed1(double speed1){
+public void setSpeed(double speed1){
     motor2.set(speed1);
   }
   
-public Command runAtlaunchCommand(double speed1){
-  return runEnd(() ->motor2.set(speed1), () -> setSpeed1(0));
+public Command runAtSpeed(double speed){
+  return runEnd(() -> motor2.set(speed), () -> setSpeed(0));
 }  
-public Command launcherCommand1(){
-    return runAtlaunchCommand(Constants.maxSpeed);
+public Command runFullSpeedCommand(){
+    return runAtSpeed(Constants.maxSpeed);
 }
-public Command launcherCommand(){
-  return runAtlaunchCommand(-Constants.maxSpeed);
+public Command runHalfSpeedCommand(){
+  return runAtSpeed(Constants.halfSpeed);
 }
-public Command idleCommand1(){
-  return runAtlaunchCommand(Constants.idleSpeed);
+public Command runBackSpeedCommand(){
+  return runAtSpeed(Constants.backSpeed);
+}
+public Command idleCommand(){
+  return runAtSpeed(Constants.idleSpeed);
 }
 
 }

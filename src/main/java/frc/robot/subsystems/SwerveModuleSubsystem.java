@@ -15,36 +15,58 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.ModuleProperties;
 
 public class SwerveModuleSubsystem {
+    boolean doDebug;
+
     SparkMax driveMotor;
     SparkMax azimuth;
     SparkClosedLoopController driveController;
     SparkClosedLoopController azimuthController;
     AbsoluteEncoder azimuthEncoder;
     public SwerveModuleSubsystem(int driveId, int turnId){
+    doDebug = driveId == 7;
+
     driveMotor = new SparkMax(driveId, MotorType.kBrushless);
     azimuth = new SparkMax(turnId, MotorType.kBrushless);
- 
+
+    SparkMaxConfig azimuthConfig = new SparkMaxConfig();
+    azimuthConfig.closedLoop.pid(1, 0, 0);
+    azimuthConfig.absoluteEncoder
+        .positionConversionFactor(ModuleProperties.kTurningEncoderPositionFactor)
+        .velocityConversionFactor(ModuleProperties.kTurningEncoderVelocityFactor)
+        .inverted(true);
+    azimuth.configure(azimuthConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    
+    SparkMaxConfig driveConfig = new SparkMaxConfig();
+    driveConfig.closedLoop.pid(0.001, 0, 0);
+    driveConfig.encoder
+        .positionConversionFactor(ModuleProperties.kDrivingEncoderPositionFactor)
+        .velocityConversionFactor(ModuleProperties.kDrivingEncoderVelocityFactor);
+    driveMotor.configure(driveConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+
     azimuthController = azimuth.getClosedLoopController();
     driveController = driveMotor.getClosedLoopController();
     azimuthEncoder = azimuth.getAbsoluteEncoder();
-
-    SparkMaxConfig config = new SparkMaxConfig();
-    config.closedLoop.pid(0.175, 0, 0);
-    driveMotor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     }
+
     public void setDesiredState(SwerveModuleState state){
     SwerveModuleState offsetState = state;
-    offsetState.optimize(Rotation2d.fromRadians(azimuthEncoder.getPosition()));
-    azimuthController.setReference(offsetState.angle.getRadians(),ControlType.kPosition);
+    offsetState.optimize(Rotation2d.fromRotations(azimuthEncoder.getPosition()));
+    azimuthController.setReference(offsetState.angle.getRotations(), ControlType.kPosition);
     AngularVelocity desiredAngularVelocity = RadiansPerSecond.of(offsetState.speedMetersPerSecond / Units.inchesToMeters(2));
     driveController.setReference(desiredAngularVelocity.in(RPM), ControlType.kVelocity);
+
+    if (doDebug) {
+    SmartDashboard.putNumber("setpoint", offsetState.angle.getRotations());
+    SmartDashboard.putNumber("position", azimuthEncoder.getPosition());
+    }
     }
 }

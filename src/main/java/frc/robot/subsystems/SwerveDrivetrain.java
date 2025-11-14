@@ -9,14 +9,14 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SwerveDrivetrain extends SubsystemBase {
-    private final double robotwidth = Units.inchesToMeters(32);
-    private final double robotlength = Units.inchesToMeters(32);
+    private final double robotwidth = Units.inchesToMeters(21);
+    private final double robotlength = Units.inchesToMeters(21);
     
     public final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(robotlength /2, robotwidth /2),
         new Translation2d(robotlength /2, -robotwidth /2),
         new Translation2d(-robotlength /2, robotwidth /2),
-        new Translation2d(-robotlength /2, -robotlength /2)
+        new Translation2d(-robotlength /2, -robotwidth /2)
     );
 
 
