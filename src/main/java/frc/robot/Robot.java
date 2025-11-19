@@ -31,8 +31,8 @@ public class Robot extends TimedRobot {
     // flywheel.setDefaultCommand(flywheel.runIdleSpeedCommand());
 
    controller.a().whileTrue(
-    Index.runHalfSpeedCommand().alongWith(flywheel.runIdleSpeedCommand()).withTimeout(Seconds.of(2)));
-
+    Index.runHalfSpeedCommand().alongWith(flywheel.runBackSpeedCommand()).withTimeout(Seconds.of(2)));
+   //controller.x().whileTrue(Index.runBackSpeedCommand()).withTimeout(Seconds.of(3));
    controller.b().onTrue(Index.runBackSpeedCommand()
    .alongWith(flywheel.runBackSpeedCommand())
    .withTimeout(Seconds.of(0.8))

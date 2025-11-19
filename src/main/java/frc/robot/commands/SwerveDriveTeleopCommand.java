@@ -31,16 +31,16 @@ public class SwerveDriveTeleopCommand extends Command {
     double xSpeed = controller.getLeftY();
     double ySpeed = controller.getLeftX();
     double angularSpeed = controller.getRightX();
-    swerveDrivetrain.drive(xSpeed, ySpeed, angularSpeed);
+    swerveDrivetrain.drive(xSpeed*3, ySpeed*3, angularSpeed * 7,false);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    swerveDrivetrain.drive(0, 0, 0);
+    swerveDrivetrain.drive(0, 0, 0,true);
   }
 
-  // Returns true when the command should end.
+  // Returns true when the command should end
   @Override
   public boolean isFinished() {
     return false;
