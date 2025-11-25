@@ -31,7 +31,7 @@ public class SwerveDriveTeleopCommand extends Command {
     double xSpeed = controller.getLeftY();
     double ySpeed = controller.getLeftX();
     double angularSpeed = controller.getRightX();
-    swerveDrivetrain.drive(xSpeed*3, ySpeed*3, angularSpeed * 7,false);
+    swerveDrivetrain.drive(xSpeed*5, ySpeed*5, angularSpeed * 7,false);
   }
 
   // Called once the command ends or is interrupted.

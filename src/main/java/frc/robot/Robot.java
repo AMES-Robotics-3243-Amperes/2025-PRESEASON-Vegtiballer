@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
    .andThen(flywheel.runFullSpeedCommand()
     .alongWith(new WaitCommand(Seconds.of(0.8))
     .andThen(Index.runHalfSpeedCommand()))
-    .withTimeout(Seconds.of(5.5))));
+    .withTimeout(Seconds.of(5))));
 
     // controller.x().whileTrue(wood.WoodCommand1().withTimeout(Seconds.of(1)));
     // controller.y().whileTrue(wood.woodLauncherCommand().withTimeout(Seconds.of(3)));
