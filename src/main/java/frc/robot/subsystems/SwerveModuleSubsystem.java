@@ -1,7 +1,10 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.Rotations;
 
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -9,6 +12,7 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkRelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -20,6 +24,7 @@ import com.studica.frc.AHRS.NavXComType;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -35,6 +40,8 @@ public class SwerveModuleSubsystem {
     SparkClosedLoopController driveController;
     SparkClosedLoopController azimuthController;
     AbsoluteEncoder azimuthEncoder;
+    RelativeEncoder driveEncoder;
+
     public SwerveModuleSubsystem(int driveId, int turnId, Rotation2d offset){
         this.offset = offset;
     driveMotor = new SparkMax(driveId, MotorType.kBrushless);
@@ -61,6 +68,7 @@ public class SwerveModuleSubsystem {
     azimuthController = azimuth.getClosedLoopController();
     driveController = driveMotor.getClosedLoopController();
     azimuthEncoder = azimuth.getAbsoluteEncoder();
+    driveEncoder = driveMotor.getEncoder();
     }
 
     public void setDesiredState(SwerveModuleState state){
@@ -71,5 +79,10 @@ public class SwerveModuleSubsystem {
 }
     AngularVelocity desiredAngularVelocity = RadiansPerSecond.of(offsetState.speedMetersPerSecond / Units.inchesToMeters(2));
     driveController.setReference(desiredAngularVelocity.in(RPM), ControlType.kVelocity);
+    }
+
+    public SwerveModulePosition getPosition() {
+      double positionMeters = ModuleProperties.kWheelDiameterMeters / 2 * Rotations.of(driveEncoder.getPosition()).in(Radians);
+      return new SwerveModulePosition(positionMeters, Rotation2d.fromRadians(azimuthEncoder.getPosition()));
     }
 }
