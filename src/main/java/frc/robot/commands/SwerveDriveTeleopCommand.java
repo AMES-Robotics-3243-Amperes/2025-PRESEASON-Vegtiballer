@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.SwerveDrivetrain;
@@ -31,13 +33,15 @@ public class SwerveDriveTeleopCommand extends Command {
     double xSpeed = controller.getLeftY();
     double ySpeed = controller.getLeftX();
     double angularSpeed = controller.getRightX();
-    swerveDrivetrain.drive(xSpeed*5, ySpeed*5, angularSpeed * 7,false);
+    Translation2d speeds = new Translation2d(xSpeed * 2, ySpeed * 2);
+    speeds = speeds.rotateBy(Rotation2d.fromDegrees(-90));
+    swerveDrivetrain.drive(speeds.getX(), speeds.getY(), angularSpeed * 4,false);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    swerveDrivetrain.drive(0, 0, 0,true);
+    swerveDrivetrain.drive(0, 0, 0, true);
   }
 
   // Returns true when the command should end

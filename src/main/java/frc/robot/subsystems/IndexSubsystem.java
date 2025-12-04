@@ -11,40 +11,44 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class IndexSubsystem extends SubsystemBase{
-   SparkMax motor2 = new SparkMax(11, MotorType.kBrushless); 
-   RelativeEncoder encoder2 = motor2.getEncoder();
+public class IndexSubsystem extends SubsystemBase {
+  SparkMax motor2 = new SparkMax(11, MotorType.kBrushless);
+  RelativeEncoder encoder2 = motor2.getEncoder();
 
-   public IndexSubsystem(){
-      SparkMaxConfig config = new SparkMaxConfig();
-      config.inverted(true);
-      motor2.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+  public IndexSubsystem() {
+    SparkMaxConfig config = new SparkMaxConfig();
+    config.inverted(true);
+    motor2.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-   }
-   @Override
-   public void periodic(){
+  }
 
+  @Override
+  public void periodic() {
 
-   }
-   
-public void setSpeed(double speed1){
+  }
+
+  public void setSpeed(double speed1) {
     motor2.set(speed1);
   }
-  
-public Command runAtSpeed(double speed){
-  return runEnd(() -> motor2.set(speed), () -> setSpeed(0));
-}  
-public Command runFullSpeedCommand(){
+
+  public Command runAtSpeed(double speed) {
+    return runEnd(() -> motor2.set(speed), () -> setSpeed(0));
+  }
+
+  public Command runFullSpeedCommand() {
     return runAtSpeed(Constants.maxSpeed);
-}
-public Command runHalfSpeedCommand(){
-  return runAtSpeed(Constants.halfSpeed);
-}
-public Command runBackSpeedCommand(){
-  return runAtSpeed(Constants.backSpeed);
-}
-public Command idleCommand(){
-  return runAtSpeed(Constants.idleSpeed);
-}
+  }
+
+  public Command runHalfSpeedCommand() {
+    return runAtSpeed(Constants.halfSpeed);
+  }
+
+  public Command runBackSpeedCommand() {
+    return runAtSpeed(Constants.backSpeed);
+  }
+
+  public Command idleCommand() {
+    return runAtSpeed(Constants.idleSpeed);
+  }
 
 }
