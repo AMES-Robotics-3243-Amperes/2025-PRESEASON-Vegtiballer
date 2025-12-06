@@ -38,15 +38,15 @@ public class Robot extends TimedRobot {
     controller.a().whileTrue(
         Index.runHalfSpeedCommand().alongWith(flywheel.runBackSpeedCommand()).withTimeout(Seconds.of(2)));
     // controller.x().whileTrue(Index.runBackSpeedCommand()).withTimeout(Seconds.of(3));
-    controller.b().onTrue(Index.runBackSpeedCommand()
-        .alongWith(flywheel.runBackSpeedCommand())
-        .withTimeout(Seconds.of(0.8))
-        .andThen(flywheel.runFullSpeedCommand()
-            .alongWith(new WaitCommand(Seconds.of(0.8))
-                .andThen(Index.runHalfSpeedCommand()))
-            .withTimeout(Seconds.of(5))));
-    
-    controller.x().onTrue(new SwerveDriveToPointCommand(drivetrain, new Pose2d(-2, 0, Rotation2d.fromDegrees(0))));
+    controller.b().whileTrue(
+        new SwerveDriveToPointCommand(drivetrain, new Pose2d(0.8, 0, Rotation2d.fromDegrees(0)))
+            .alongWith(
+                flywheel.runBackSpeedCommand().withTimeout(Seconds.of(0.8)).deadlineFor(Index.runBackSpeedCommand()))
+            .andThen(flywheel.runFullSpeedCommand()
+                .alongWith(new WaitCommand(Seconds.of(0.8))
+                    .andThen(Index.runHalfSpeedCommand()))));
+
+    controller.x().onTrue(new SwerveDriveToPointCommand(drivetrain, new Pose2d(0.6, 0, Rotation2d.fromDegrees(0))));
 
     // controller.x().whileTrue(wood.WoodCommand1().withTimeout(Seconds.of(1)));
     // controller.y().whileTrue(wood.woodLauncherCommand().withTimeout(Seconds.of(3)));

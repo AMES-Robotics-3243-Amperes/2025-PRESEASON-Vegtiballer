@@ -1,9 +1,8 @@
 package frc.robot;
 
 public class Constants {
-  public static final double maxSpeed = 0.275;
-  public static final double halfSpeed = maxSpeed * 0.55;
-  public static final double backSpeed = -maxSpeed;
+  public static final double maxSpeed = 0.31;
+  public static final double slowSpeed = 0.15;
   public static final double idleSpeed = -0.08;
 
   public static final class ModuleProperties {

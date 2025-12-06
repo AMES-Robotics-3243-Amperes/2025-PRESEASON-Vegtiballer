@@ -93,10 +93,20 @@ public class SwerveDrivetrain extends SubsystemBase {
 
     estimator.update(Rotation2d.fromDegrees(-imu.getYaw()), modulePositions());
 
-    boolean useVision = estimate.tagCount != 0;
+    boolean useVision = estimate.tagCount != 0 && imu.getRate() < 270;
+    if (megaTagOne && estimate.tagCount == 1 && estimate.rawFiducials.length == 1) {
+      if (estimate.rawFiducials[0].ambiguity > 0.7) {
+        useVision = false;
+      }
+    }
+
+    if (megaTagOne) {
+      estimator.setVisionMeasurementStdDevs(VecBuilder.fill(1.5, 1.5, 1.2));
+    } else {
+      estimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 999999));
+    }
 
     if (useVision) {
-      estimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 1));
       estimator.addVisionMeasurement(estimate.pose, estimate.timestampSeconds);
     }
 

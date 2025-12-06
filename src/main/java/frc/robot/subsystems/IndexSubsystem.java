@@ -40,11 +40,11 @@ public class IndexSubsystem extends SubsystemBase {
   }
 
   public Command runHalfSpeedCommand() {
-    return runAtSpeed(Constants.halfSpeed);
+    return runAtSpeed(Constants.slowSpeed);
   }
 
   public Command runBackSpeedCommand() {
-    return runAtSpeed(Constants.backSpeed);
+    return runAtSpeed(-Constants.slowSpeed);
   }
 
   public Command idleCommand() {

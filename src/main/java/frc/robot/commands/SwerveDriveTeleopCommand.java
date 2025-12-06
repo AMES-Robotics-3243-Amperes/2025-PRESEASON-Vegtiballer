@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -33,9 +32,9 @@ public class SwerveDriveTeleopCommand extends Command {
     double xSpeed = controller.getLeftY();
     double ySpeed = controller.getLeftX();
     double angularSpeed = controller.getRightX();
-    Translation2d speeds = new Translation2d(xSpeed * 2, ySpeed * 2);
-    speeds = speeds.rotateBy(Rotation2d.fromDegrees(-90));
-    swerveDrivetrain.drive(speeds.getX(), speeds.getY(), angularSpeed * 4,false);
+    Translation2d speeds = new Translation2d(xSpeed * 5, ySpeed * 5);
+    // speeds = speeds.rotateBy(Rotation2d.fromDegrees(-90));
+    swerveDrivetrain.drive(speeds.getX(), speeds.getY(), angularSpeed * 8,false);
   }
 
   // Called once the command ends or is interrupted.

@@ -28,11 +28,11 @@ public class FlywheelSubsystem extends SubsystemBase {
   }
 
   public Command runBackSpeedCommand() {
-    return runAtSpeedCommand(Constants.backSpeed);
+    return runAtSpeedCommand(-Constants.slowSpeed);
   }
 
   public Command runHalfSpeedCommand() {
-    return runAtSpeedCommand(-Constants.halfSpeed);
+    return runAtSpeedCommand(Constants.slowSpeed);
   }
 
   public Command runFullSpeedCommand() {
