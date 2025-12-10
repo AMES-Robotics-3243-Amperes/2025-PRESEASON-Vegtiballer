@@ -38,7 +38,7 @@ public class SwerveModuleSubsystem {
     azimuth = new SparkMax(turnId, MotorType.kBrushless);
 
     SparkMaxConfig azimuthConfig = new SparkMaxConfig();
-    azimuthConfig.closedLoop.pid(1, 0, 0)
+    azimuthConfig.closedLoop.pid(1.5, 0, 0)
         .positionWrappingEnabled(true)
         .positionWrappingInputRange(0, 1)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
@@ -53,7 +53,7 @@ public class SwerveModuleSubsystem {
     driveConfig.encoder
         .positionConversionFactor(ModuleProperties.kDrivingEncoderPositionFactor)
         .velocityConversionFactor(ModuleProperties.kDrivingEncoderVelocityFactor);
-    driveMotor.configure(driveConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+    driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     azimuthController = azimuth.getClosedLoopController();
     driveController = driveMotor.getClosedLoopController();
@@ -73,9 +73,9 @@ public class SwerveModuleSubsystem {
   }
 
   public SwerveModulePosition getPosition() {
-    double positionMeters = ModuleProperties.kWheelDiameterMeters / 2
+    double positionMeters = -ModuleProperties.kWheelDiameterMeters / 2
         * Rotations.of(driveEncoder.getPosition()).in(Radians);
         
-    return new SwerveModulePosition(positionMeters, Rotation2d.fromRadians(azimuthEncoder.getPosition()));
+    return new SwerveModulePosition(positionMeters, Rotation2d.fromRotations(azimuthEncoder.getPosition()).minus(offset));
   }
 }

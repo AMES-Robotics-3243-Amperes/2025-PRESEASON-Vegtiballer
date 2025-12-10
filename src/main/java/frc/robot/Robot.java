@@ -39,9 +39,9 @@ public class Robot extends TimedRobot {
         Index.runHalfSpeedCommand().alongWith(flywheel.runBackSpeedCommand()).withTimeout(Seconds.of(2)));
     // controller.x().whileTrue(Index.runBackSpeedCommand()).withTimeout(Seconds.of(3));
     controller.b().whileTrue(
-        new SwerveDriveToPointCommand(drivetrain, new Pose2d(0.8, 0, Rotation2d.fromDegrees(0)))
+        new SwerveDriveToPointCommand(drivetrain, new Pose2d(14.8, 0.8, Rotation2d.fromDegrees(0)))
             .alongWith(
-                flywheel.runBackSpeedCommand().withTimeout(Seconds.of(0.8)).deadlineFor(Index.runBackSpeedCommand()))
+                flywheel.runBackSpeedCommand().withTimeout(Seconds.of(1)).deadlineFor(Index.runBackSpeedCommand()))
             .andThen(flywheel.runFullSpeedCommand()
                 .alongWith(new WaitCommand(Seconds.of(0.8))
                     .andThen(Index.runHalfSpeedCommand()))));
