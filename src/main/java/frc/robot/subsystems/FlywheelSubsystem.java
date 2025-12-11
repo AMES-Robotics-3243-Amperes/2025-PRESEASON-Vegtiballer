@@ -28,7 +28,7 @@ public class FlywheelSubsystem extends SubsystemBase {
   }
 
   public Command runBackSpeedCommand() {
-    return runAtSpeedCommand(-Constants.slowSpeed);
+    return runAtSpeedCommand(-Constants.maxSpeed);
   }
 
   public Command runHalfSpeedCommand() {
