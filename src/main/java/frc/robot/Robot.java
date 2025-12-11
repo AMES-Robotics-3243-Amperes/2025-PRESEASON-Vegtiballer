@@ -49,8 +49,8 @@ public class Robot extends TimedRobot {
 
     controller.x().onTrue(new SwerveDriveToPointCommand(drivetrain, new Pose2d(0.6, 0, Rotation2d.fromDegrees(0))));
 
-    controller.leftTrigger().whileTrue(wood.WoodCommand1().withTimeout(Seconds.of(1)));
-    controller.rightTrigger().whileTrue(wood.woodLauncherCommand().withTimeout(Seconds.of(3)));
+    controller.leftBumper().whileTrue(wood.WoodCommand1());
+    controller.rightBumper().whileTrue(wood.woodLauncherCommand());
 
     var drivetrainCommand = new SwerveDriveTeleopCommand(drivetrain, controller);
     drivetrain.setDefaultCommand(drivetrainCommand);
@@ -64,8 +64,8 @@ public class Robot extends TimedRobot {
     // .andThen
     // (flywheel.runAtlaunchCommand().withTimeout(Seconds.of(2)));
 
-    controller.rightBumper().onTrue(new InstantCommand(drivetrain::useMegatagTwo));
-    controller.leftBumper().onTrue(new InstantCommand(drivetrain::useMegatagOne));
+    controller.rightTrigger().onTrue(new InstantCommand(drivetrain::useMegatagTwo));
+    controller.leftTrigger().onTrue(new InstantCommand(drivetrain::useMegatagOne));
 
     drivetrain.useMegatagOne();
   }
