@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class WoodSubsystem extends SubsystemBase {
-  SparkMax motor3 = new SparkMax(3, MotorType.kBrushless);
+  SparkMax motor3 = new SparkMax(12, MotorType.kBrushless);
   RelativeEncoder encoder2 = motor3.getEncoder();
 
   public WoodSubsystem() {

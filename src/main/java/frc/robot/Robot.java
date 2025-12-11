@@ -16,6 +16,7 @@ import frc.robot.commands.SwerveDriveToPointCommand;
 import frc.robot.subsystems.FlywheelSubsystem;
 import frc.robot.subsystems.IndexSubsystem;
 import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.subsystems.WoodSubsystem;
 
 public class Robot extends TimedRobot {
   // WoodSubsystem wood = new WoodSubsystem();
@@ -24,7 +25,7 @@ public class Robot extends TimedRobot {
   CommandXboxController controller = new CommandXboxController(0);
   FlywheelJoysticCommand flywheelJoysticCommand = new FlywheelJoysticCommand(controller, flywheel);
   SwerveDrivetrain drivetrain = new SwerveDrivetrain();
-
+  WoodSubsystem wood = new WoodSubsystem();
   public Robot() {
     /*
      * flywheel.setDefaultCommand(flywheelJoysticCommand);
@@ -48,8 +49,8 @@ public class Robot extends TimedRobot {
 
     controller.x().onTrue(new SwerveDriveToPointCommand(drivetrain, new Pose2d(0.6, 0, Rotation2d.fromDegrees(0))));
 
-    // controller.x().whileTrue(wood.WoodCommand1().withTimeout(Seconds.of(1)));
-    // controller.y().whileTrue(wood.woodLauncherCommand().withTimeout(Seconds.of(3)));
+    controller.leftTrigger().whileTrue(wood.WoodCommand1().withTimeout(Seconds.of(1)));
+    controller.rightTrigger().whileTrue(wood.woodLauncherCommand().withTimeout(Seconds.of(3)));
 
     var drivetrainCommand = new SwerveDriveTeleopCommand(drivetrain, controller);
     drivetrain.setDefaultCommand(drivetrainCommand);
