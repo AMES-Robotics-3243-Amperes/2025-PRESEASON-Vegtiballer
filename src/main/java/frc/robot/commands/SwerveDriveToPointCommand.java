@@ -13,24 +13,24 @@ import frc.robot.subsystems.SwerveDrivetrain;
 public class SwerveDriveToPointCommand extends Command {
   private final SwerveDrivetrain drivetrain;
 
-  private final PIDController xController = new PIDController(7, 0, 0);
-  private final PIDController yController = new PIDController(7, 0, 0);
-  private final PIDController thetaController = new PIDController(5, 0, 0);
+  private final PIDController xController = new PIDController(10, 0, 0);
+  private final PIDController yController = new PIDController(10, 0, 0);
+  private final PIDController thetaController = new PIDController(6, 0, 0);
 
   /** Creates a new SwerveDriveToPointCommand. */
   public SwerveDriveToPointCommand(SwerveDrivetrain drivetrain, Pose2d target) {
     this.drivetrain = drivetrain;
     
     xController.setSetpoint(target.getX());
-    xController.setTolerance(0.1);
+    xController.setTolerance(0.04);
     xController.setIntegratorRange(-2.5, 2.5);
 
     yController.setSetpoint(target.getY());
-    yController.setTolerance(0.1);
+    yController.setTolerance(0.04);
     yController.setIntegratorRange(-2.5, 2.5);
 
     thetaController.setSetpoint(MathUtil.angleModulus(target.getRotation().getRadians()));
-    thetaController.setTolerance(0.4);
+    thetaController.setTolerance(0.2);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
     addRequirements(drivetrain);
@@ -50,8 +50,8 @@ public class SwerveDriveToPointCommand extends Command {
     Pose2d currentPosition = drivetrain.getPosition();
     
     drivetrain.drive(
-      -MathUtil.clamp(xController.calculate(currentPosition.getX()), -1, 1), 
-      -MathUtil.clamp(yController.calculate(currentPosition.getY()), -1, 1),
+      -MathUtil.clamp(xController.calculate(currentPosition.getX()), -2.5, 2.5), 
+      -MathUtil.clamp(yController.calculate(currentPosition.getY()), -2.5, 2.5),
       -thetaController.calculate(MathUtil.angleModulus(currentPosition.getRotation().getRadians())),
       false);
   }

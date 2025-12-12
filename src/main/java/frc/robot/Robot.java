@@ -26,6 +26,7 @@ public class Robot extends TimedRobot {
   FlywheelJoysticCommand flywheelJoysticCommand = new FlywheelJoysticCommand(controller, flywheel);
   SwerveDrivetrain drivetrain = new SwerveDrivetrain();
   WoodSubsystem wood = new WoodSubsystem();
+
   public Robot() {
     /*
      * flywheel.setDefaultCommand(flywheelJoysticCommand);
@@ -40,11 +41,12 @@ public class Robot extends TimedRobot {
         Index.runHalfSpeedCommand().alongWith(flywheel.runBackSpeedCommand()).withTimeout(Seconds.of(2)));
     // controller.x().whileTrue(Index.runBackSpeedCommand()).withTimeout(Seconds.of(3));
     controller.b().whileTrue(
-        new SwerveDriveToPointCommand(drivetrain, new Pose2d(14.8, 0.8, Rotation2d.fromDegrees(0)))
+        new SwerveDriveToPointCommand(drivetrain, new Pose2d(15, 0.7, Rotation2d.fromDegrees(0)))
             .alongWith(
-                flywheel.runBackSpeedCommand().withTimeout(Seconds.of(1)).deadlineFor(Index.runBackSpeedCommand()))
+                flywheel.runBackSpeedCommand().withTimeout(Seconds.of(0.5)).deadlineFor(Index.runBackSpeedCommand()))
             .andThen(flywheel.runFullSpeedCommand()
-                .alongWith(new WaitCommand(Seconds.of(0.8))
+                .alongWith(wood.WoodCommand1().withTimeout(Seconds.of(0.5)))
+                .alongWith(new WaitCommand(Seconds.of(0.6))
                     .andThen(Index.runHalfSpeedCommand()))));
 
     controller.x().onTrue(new SwerveDriveToPointCommand(drivetrain, new Pose2d(0.6, 0, Rotation2d.fromDegrees(0))));
@@ -72,9 +74,15 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    flywheel.runFullSpeedCommand().withTimeout(Seconds.of(3))
-        .andThen(new WaitCommand(Seconds.of(3)))
-        .andThen(flywheel.runBackSpeedCommand().withTimeout(Seconds.of(3))).schedule();
+    new SwerveDriveToPointCommand(drivetrain, new Pose2d(15, 0.7, Rotation2d.fromDegrees(0)))
+        .alongWith(
+            flywheel.runBackSpeedCommand().withTimeout(Seconds.of(0.5)).deadlineFor(Index.runBackSpeedCommand()))
+        .andThen(flywheel.runFullSpeedCommand()
+            .alongWith(wood.WoodCommand1().withTimeout(Seconds.of(0.5)))
+            .alongWith(new WaitCommand(Seconds.of(0.6))
+                .andThen(Index.runHalfSpeedCommand()))
+            .withTimeout(Seconds.of(5)))
+        .schedule();
 
     drivetrain.useMegatagTwo();
   }

@@ -35,10 +35,10 @@ public class WoodSubsystem extends SubsystemBase {
   }
 
   public Command WoodCommand1() {
-    return costomWoodCommand(Constants.slowSpeed);
+    return costomWoodCommand(0.35);
   }
 
   public Command woodLauncherCommand() {
-    return costomWoodCommand(-Constants.slowSpeed);
+    return costomWoodCommand(-Constants.slowSpeed*.5);
   }
 }
