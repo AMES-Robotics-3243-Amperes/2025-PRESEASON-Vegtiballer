@@ -81,7 +81,11 @@ public class Robot extends TimedRobot {
             .alongWith(wood.WoodCommand1().withTimeout(Seconds.of(0.5)))
             .alongWith(new WaitCommand(Seconds.of(0.6))
                 .andThen(Index.runHalfSpeedCommand()))
-            .withTimeout(Seconds.of(5)))
+            .withTimeout(Seconds.of(4)))
+        // .andThen(new SwerveDriveToPointCommand(drivetrain, new Pose2d(13.5, 3.9624, Rotation2d.fromDegrees(0))))
+        // .andThen(new SwerveDriveToPointCommand(drivetrain, new Pose2d(12, 3.9624, Rotation2d.fromDegrees(0))))
+        .andThen(new SwerveDriveToPointCommand(drivetrain, new Pose2d(13.5, 3.7124, Rotation2d.fromDegrees(0))))
+        .andThen(new SwerveDriveToPointCommand(drivetrain, new Pose2d(11.8, 3.7124, Rotation2d.fromDegrees(0))))
         .schedule();
 
     drivetrain.useMegatagTwo();
