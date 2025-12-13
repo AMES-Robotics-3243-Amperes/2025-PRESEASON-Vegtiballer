@@ -33,6 +33,7 @@ public class SwerveDriveTeleopCommand extends Command {
     double ySpeed = controller.getLeftX();
     double angularSpeed = controller.getRightX();
     Translation2d speeds = new Translation2d(xSpeed * 5, ySpeed * 5);
+    speeds = speeds.times(1 - 0.7 * controller.getLeftTriggerAxis());
     // speeds = speeds.rotateBy(Rotation2d.fromDegrees(-90));
     swerveDrivetrain.drive(speeds.getX(), speeds.getY(), angularSpeed * 8,false);
   }

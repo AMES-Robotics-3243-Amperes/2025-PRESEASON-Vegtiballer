@@ -38,7 +38,7 @@ public class SwerveModuleSubsystem {
     azimuth = new SparkMax(turnId, MotorType.kBrushless);
 
     SparkMaxConfig azimuthConfig = new SparkMaxConfig();
-    azimuthConfig.closedLoop.pid(1.5, 0, 0)
+    azimuthConfig.closedLoop.pid(1.8, 0, 0)
         .positionWrappingEnabled(true)
         .positionWrappingInputRange(0, 1)
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);

@@ -4,7 +4,9 @@ import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -27,6 +29,10 @@ public class Robot extends TimedRobot {
   SwerveDrivetrain drivetrain = new SwerveDrivetrain();
   WoodSubsystem wood = new WoodSubsystem();
 
+  private double flipXCoordinatee(double x) {
+    return DriverStation.getAlliance().map(alliance -> alliance == Alliance.Blue ? 16.4592 - x : x).orElse(x);
+  }
+
   public Robot() {
     /*
      * flywheel.setDefaultCommand(flywheelJoysticCommand);
@@ -41,15 +47,13 @@ public class Robot extends TimedRobot {
         Index.runHalfSpeedCommand().alongWith(flywheel.runBackSpeedCommand()).withTimeout(Seconds.of(2)));
     // controller.x().whileTrue(Index.runBackSpeedCommand()).withTimeout(Seconds.of(3));
     controller.b().whileTrue(
-        new SwerveDriveToPointCommand(drivetrain, new Pose2d(15, 0.7, Rotation2d.fromDegrees(0)))
+        new SwerveDriveToPointCommand(drivetrain, new Pose2d(flipXCoordinatee(15.0), 0.7, Rotation2d.fromDegrees(0)))
             .alongWith(
-                flywheel.runBackSpeedCommand().withTimeout(Seconds.of(0.5)).deadlineFor(Index.runBackSpeedCommand()))
+                flywheel.runBackSpeedCommand().withTimeout(Seconds.of(0.6)).deadlineFor(Index.runBackSpeedCommand()))
             .andThen(flywheel.runFullSpeedCommand()
                 .alongWith(wood.WoodCommand1().withTimeout(Seconds.of(0.5)))
-                .alongWith(new WaitCommand(Seconds.of(0.6))
+                .alongWith(new WaitCommand(Seconds.of(0.8))
                     .andThen(Index.runHalfSpeedCommand()))));
-
-    controller.x().onTrue(new SwerveDriveToPointCommand(drivetrain, new Pose2d(0.6, 0, Rotation2d.fromDegrees(0))));
 
     controller.leftBumper().whileTrue(wood.WoodCommand1());
     controller.rightBumper().whileTrue(wood.woodLauncherCommand());
@@ -66,26 +70,25 @@ public class Robot extends TimedRobot {
     // .andThen
     // (flywheel.runAtlaunchCommand().withTimeout(Seconds.of(2)));
 
-    controller.rightTrigger().onTrue(new InstantCommand(drivetrain::useMegatagTwo));
-    controller.leftTrigger().onTrue(new InstantCommand(drivetrain::useMegatagOne));
+    controller.start().onTrue(new InstantCommand(drivetrain::useMegatagTwo));
+    controller.back().onTrue(new InstantCommand(drivetrain::useMegatagOne));
 
     drivetrain.useMegatagOne();
   }
 
   @Override
   public void autonomousInit() {
-    new SwerveDriveToPointCommand(drivetrain, new Pose2d(15, 0.7, Rotation2d.fromDegrees(0)))
+    new SwerveDriveToPointCommand(drivetrain, new Pose2d(flipXCoordinatee(15.0), 0.7, Rotation2d.fromDegrees(0)))
         .alongWith(
-            flywheel.runBackSpeedCommand().withTimeout(Seconds.of(0.5)).deadlineFor(Index.runBackSpeedCommand()))
+            flywheel.runBackSpeedCommand().withTimeout(Seconds.of(0.6)).deadlineFor(Index.runBackSpeedCommand()))
         .andThen(flywheel.runFullSpeedCommand()
             .alongWith(wood.WoodCommand1().withTimeout(Seconds.of(0.5)))
-            .alongWith(new WaitCommand(Seconds.of(0.6))
+            .alongWith(new WaitCommand(Seconds.of(0.8))
                 .andThen(Index.runHalfSpeedCommand()))
-            .withTimeout(Seconds.of(4)))
-        // .andThen(new SwerveDriveToPointCommand(drivetrain, new Pose2d(13.5, 3.9624, Rotation2d.fromDegrees(0))))
-        // .andThen(new SwerveDriveToPointCommand(drivetrain, new Pose2d(12, 3.9624, Rotation2d.fromDegrees(0))))
-        .andThen(new SwerveDriveToPointCommand(drivetrain, new Pose2d(13.5, 3.7124, Rotation2d.fromDegrees(0))))
-        .andThen(new SwerveDriveToPointCommand(drivetrain, new Pose2d(11.8, 3.7124, Rotation2d.fromDegrees(0))))
+            .withTimeout(Seconds.of(3.5)))
+        .andThen(new SwerveDriveToPointCommand(drivetrain, new Pose2d(flipXCoordinatee(13.4), 3.9624 + 0.06, Rotation2d.fromDegrees(0))))
+        .andThen(new SwerveDriveToPointCommand(drivetrain, new Pose2d(flipXCoordinatee(11.5), 3.9624 + 0.06, Rotation2d.fromDegrees(0))))
+        .andThen(new SwerveDriveToPointCommand(drivetrain, new Pose2d(flipXCoordinatee(11.5), 3.05, Rotation2d.fromDegrees(0))))
         .schedule();
 
     drivetrain.useMegatagTwo();

@@ -44,7 +44,7 @@ public class IndexSubsystem extends SubsystemBase {
   }
 
   public Command runBackSpeedCommand() {
-    return runAtSpeed(-Constants.slowSpeed);
+    return runAtSpeed(-Constants.maxSpeed);
   }
 
   public Command idleCommand() {
