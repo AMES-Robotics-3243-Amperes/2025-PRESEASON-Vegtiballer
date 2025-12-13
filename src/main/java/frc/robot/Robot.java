@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -76,9 +77,12 @@ public class Robot extends TimedRobot {
     drivetrain.useMegatagOne();
   }
 
+  Command autoCommand;
+
   @Override
   public void autonomousInit() {
-    new SwerveDriveToPointCommand(drivetrain, new Pose2d(flipXCoordinatee(15.0), 0.7, Rotation2d.fromDegrees(0)))
+    autoCommand = new WaitCommand(Seconds.of(1)).andThen(new SwerveDriveToPointCommand(drivetrain,
+        new Pose2d(flipXCoordinatee(15.0), 0.7, Rotation2d.fromDegrees(0)))
         .alongWith(
             flywheel.runBackSpeedCommand().withTimeout(Seconds.of(0.6)).deadlineFor(Index.runBackSpeedCommand()))
         .andThen(flywheel.runFullSpeedCommand()
@@ -86,12 +90,15 @@ public class Robot extends TimedRobot {
             .alongWith(new WaitCommand(Seconds.of(0.8))
                 .andThen(Index.runHalfSpeedCommand()))
             .withTimeout(Seconds.of(3.5)))
-        .andThen(new SwerveDriveToPointCommand(drivetrain, new Pose2d(flipXCoordinatee(13.4), 3.9624 + 0.06, Rotation2d.fromDegrees(0))))
-        .andThen(new SwerveDriveToPointCommand(drivetrain, new Pose2d(flipXCoordinatee(11.5), 3.9624 + 0.06, Rotation2d.fromDegrees(0))))
-        .andThen(new SwerveDriveToPointCommand(drivetrain, new Pose2d(flipXCoordinatee(11.5), 3.05, Rotation2d.fromDegrees(0))))
-        .schedule();
+        .andThen(new SwerveDriveToPointCommand(drivetrain,
+            new Pose2d(flipXCoordinatee(13.4), 3.9624 + 0.06, Rotation2d.fromDegrees(0))))
+        .andThen(new SwerveDriveToPointCommand(drivetrain,
+            new Pose2d(flipXCoordinatee(11.5), 3.9624 + 0.06, Rotation2d.fromDegrees(0))))
+        .andThen(new SwerveDriveToPointCommand(drivetrain,
+            new Pose2d(flipXCoordinatee(11.5), 3.05, Rotation2d.fromDegrees(0)))));
 
     drivetrain.useMegatagTwo();
+    autoCommand.schedule();
   }
 
   @Override
@@ -101,6 +108,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    autoCommand.cancel();
+    drivetrain.useMegatagTwo();
   }
 
   @Override
@@ -109,6 +118,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
+    drivetrain.useMegatagOne();
   }
 
   @Override

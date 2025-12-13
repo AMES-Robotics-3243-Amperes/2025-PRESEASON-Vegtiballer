@@ -50,8 +50,8 @@ public class SwerveDriveToPointCommand extends Command {
     Pose2d currentPosition = drivetrain.getPosition();
     
     drivetrain.drive(
-      -MathUtil.clamp(xController.calculate(currentPosition.getX()), -2.5, 2.5), 
-      -MathUtil.clamp(yController.calculate(currentPosition.getY()), -2.5, 2.5),
+      -MathUtil.clamp(xController.calculate(currentPosition.getX()), -3.5, 3.5), 
+      -MathUtil.clamp(yController.calculate(currentPosition.getY()), -3.5, 3.5),
       -thetaController.calculate(MathUtil.angleModulus(currentPosition.getRotation().getRadians())),
       false);
   }
