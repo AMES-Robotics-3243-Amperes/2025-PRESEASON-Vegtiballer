@@ -34,6 +34,12 @@ public class Robot extends TimedRobot {
     return DriverStation.getAlliance().map(alliance -> alliance == Alliance.Blue ? 16.4592 - x : x).orElse(x);
   }
 
+  private Rotation2d flipRotation(Rotation2d rotation) {
+    return DriverStation.getAlliance()
+        .map(alliance -> alliance == Alliance.Blue ? rotation.plus(Rotation2d.fromDegrees(180)) : rotation)
+        .orElse(rotation);
+  }
+
   public Robot() {
     /*
      * flywheel.setDefaultCommand(flywheelJoysticCommand);
@@ -47,14 +53,6 @@ public class Robot extends TimedRobot {
     controller.a().whileTrue(
         Index.runHalfSpeedCommand().alongWith(flywheel.runBackSpeedCommand()).withTimeout(Seconds.of(2)));
     // controller.x().whileTrue(Index.runBackSpeedCommand()).withTimeout(Seconds.of(3));
-    controller.b().whileTrue(
-        new SwerveDriveToPointCommand(drivetrain, new Pose2d(flipXCoordinatee(15.0), 0.7, Rotation2d.fromDegrees(0)))
-            .alongWith(
-                flywheel.runBackSpeedCommand().withTimeout(Seconds.of(0.6)).deadlineFor(Index.runBackSpeedCommand()))
-            .andThen(flywheel.runFullSpeedCommand()
-                .alongWith(wood.WoodCommand1().withTimeout(Seconds.of(0.5)))
-                .alongWith(new WaitCommand(Seconds.of(0.8))
-                    .andThen(Index.runHalfSpeedCommand()))));
 
     controller.leftBumper().whileTrue(wood.WoodCommand1());
     controller.rightBumper().whileTrue(wood.woodLauncherCommand());
@@ -82,7 +80,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     autoCommand = new WaitCommand(Seconds.of(1)).andThen(new SwerveDriveToPointCommand(drivetrain,
-        new Pose2d(flipXCoordinatee(15.0), 0.7, Rotation2d.fromDegrees(0)))
+        new Pose2d(flipXCoordinatee(15.0), 0.7, flipRotation(Rotation2d.fromDegrees(0))))
         .alongWith(
             flywheel.runBackSpeedCommand().withTimeout(Seconds.of(0.6)).deadlineFor(Index.runBackSpeedCommand()))
         .andThen(flywheel.runFullSpeedCommand()
@@ -91,11 +89,11 @@ public class Robot extends TimedRobot {
                 .andThen(Index.runHalfSpeedCommand()))
             .withTimeout(Seconds.of(3.5)))
         .andThen(new SwerveDriveToPointCommand(drivetrain,
-            new Pose2d(flipXCoordinatee(13.4), 3.9624 + 0.06, Rotation2d.fromDegrees(0))))
+            new Pose2d(flipXCoordinatee(13.4), 3.9624 + 0.06, flipRotation(Rotation2d.fromDegrees(0)))))
         .andThen(new SwerveDriveToPointCommand(drivetrain,
-            new Pose2d(flipXCoordinatee(11.5), 3.9624 + 0.06, Rotation2d.fromDegrees(0))))
+            new Pose2d(flipXCoordinatee(11.5), 3.9624 + 0.06, flipRotation(Rotation2d.fromDegrees(0)))))
         .andThen(new SwerveDriveToPointCommand(drivetrain,
-            new Pose2d(flipXCoordinatee(11.5), 3.05, Rotation2d.fromDegrees(0)))));
+            new Pose2d(flipXCoordinatee(11.5), 3.05, flipRotation(Rotation2d.fromDegrees(0))))));
 
     drivetrain.useMegatagTwo();
     autoCommand.schedule();
@@ -110,6 +108,16 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     autoCommand.cancel();
     drivetrain.useMegatagTwo();
+
+    controller.b().whileTrue(
+        new SwerveDriveToPointCommand(drivetrain,
+            new Pose2d(flipXCoordinatee(15.0), 0.7, flipRotation(Rotation2d.fromDegrees(0))))
+            .alongWith(
+                flywheel.runBackSpeedCommand().withTimeout(Seconds.of(0.6)).deadlineFor(Index.runBackSpeedCommand()))
+            .andThen(flywheel.runFullSpeedCommand()
+                .alongWith(wood.WoodCommand1().withTimeout(Seconds.of(0.5)))
+                .alongWith(new WaitCommand(Seconds.of(0.8))
+                    .andThen(Index.runHalfSpeedCommand()))));
   }
 
   @Override
